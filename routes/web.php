@@ -1,23 +1,20 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\GalleryController;
-use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
+// Frontend
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    
-    Route::resource('galleries', GalleryController::class);
-    Route::resource('testimonials', TestimonialController::class);
-    Route::patch('testimonials/{testimonial}/approve', [TestimonialController::class, 'approve'])->name('testimonials.approve');
-    
-    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
-});
+// Testimonial Store (AJAX)
+Route::post('/testimonial/store', [AdminController::class, 'storeTestimonial'])->name('testimonial.store');
 
-require __DIR__.'/auth.php';
+// Admin Routes
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::post('/gallery/upload', [AdminController::class, 'uploadGallery'])->name('admin.gallery.upload');
+    Route::delete('/gallery/{id}', [AdminController::class, 'deleteGallery'])->name('admin.gallery.delete');
+    Route::get('/testimonial/approve/{id}', [AdminController::class, 'approveTestimonial'])->name('admin.testimonial.approve');
+    Route::delete('/testimonial/{id}', [AdminController::class, 'deleteTestimonial'])->name('admin.testimonial.delete');
+});
