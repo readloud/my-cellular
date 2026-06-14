@@ -1,8 +1,9 @@
-### **1. Install & Run**
+### **1. Setup & Run**
 
-1. **Buat project Laravel baru:**
+1. **Clone Repository**
+
 ```bash
-composer create-project laravel/laravel my-cellular
+git push https://github.com/readloud/my-cellular
 cd my-cellular
 ```
 
